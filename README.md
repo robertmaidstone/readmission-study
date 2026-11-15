@@ -1,26 +1,186 @@
-# readmission-study
+# Synthetic Healthcare Readmission Study
 
-Project on synthetic data. Designed to develop workflows for analysis of admissions data using integration of SQL and Python.
+![Python](https://img.shields.io/badge/Python-3.14+-3776AB?logo=python&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-4169E1?logo=postgresql&logoColor=white)
+![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-F37626?logo=jupyter&logoColor=white)
+![Last Commit](https://img.shields.io/github/last-commit/robertmaidstone/readmission-study?cacheSeconds=60)
 
-### Next steps
+## Overview
 
-1. Remove hard coding of passwords (only temp passwords currently used)
-2. More complex analysis
-3. Better plotting
+This repository contains a synthetic healthcare analytics workflow developed to learn and demonstrate modern health data science practices using PostgreSQL, SQL, Python and Jupyter notebooks.
 
-### Outline
+Synthetic patient and hospital admission records are generated programmatically, loaded into a PostgreSQL database and analysed using SQL and Python. The project is designed to mirror common healthcare analytics workflows used in NHS, academic and industry settings.
 
-- Background
-  - Why readmissions matter.
-- Data model
-  - ER diagram.
-- SQL examples
-  - Show cohort extraction.
-- Statistical methods
-  - Kaplan-Meier
-  - Cox regression
-- Results
-  - Figures and tables.
-- Discussion
-  - Limitations.
-  - Future work.
+The primary objectives are:
+
+- Building relational healthcare databases
+- Cohort extraction using SQL
+- Integrating PostgreSQL and Python
+- Reproducible health data science workflows
+- Exploratory analysis of admissions data
+- Survival and readmission analyses
+
+---
+
+## Project Structure
+
+```text
+readmission-study/
+
+data/
+    patients.csv
+    admissions.csv
+
+sql/
+    schema.sql
+
+src/
+    generate_data.py
+    load_data.py
+
+notebooks/
+    analysis.ipynb
+
+README.md
+```
+
+---
+
+## Data Model
+
+The synthetic dataset currently contains:
+
+### Patients
+
+| Variable | Description |
+|-----------|-------------|
+| patient_id | Unique patient identifier |
+| age | Age in years |
+| sex | Biological sex |
+
+### Admissions
+
+| Variable | Description |
+|-----------|-------------|
+| admission_id | Unique admission identifier |
+| patient_id | Linked patient identifier |
+| admit_date | Admission date |
+| discharge_date | Discharge date |
+| diagnosis | Primary diagnosis |
+
+Future versions will incorporate:
+
+- Multiple admissions per patient
+- Readmission events
+- Comorbidity burden
+- Medication records
+- Mortality outcomes
+
+---
+
+## Workflow
+
+```text
+Synthetic Data Generation
+            ↓
+      PostgreSQL
+            ↓
+      SQL Queries
+            ↓
+      Python/Pandas
+            ↓
+ Visualisation & Modelling
+            ↓
+ Jupyter Notebook Report
+```
+
+---
+
+## Current Analyses
+
+Implemented analyses include:
+
+- Patient demographics
+- Average age by diagnosis
+- Length of stay calculations
+- Admission frequency analyses
+- SQL-to-Python data extraction
+
+Examples of SQL queries include:
+
+```sql
+SELECT
+    diagnosis,
+    AVG(discharge_date - admit_date) AS avg_los
+FROM admissions
+GROUP BY diagnosis;
+```
+
+---
+
+## Planned Analyses
+
+The project is being extended toward more realistic healthcare analytics workflows.
+
+Planned additions include:
+
+- Readmission rate estimation
+- Kaplan-Meier survival analysis
+- Cox proportional hazards models
+- Machine learning prediction of readmission
+- Publication-quality visualisations
+- Automated database build pipeline
+
+---
+
+## Running the Project
+
+### Create database
+
+```bash
+psql -U postgres
+CREATE DATABASE healthcare;
+```
+
+### Create tables
+
+```bash
+psql healthcare -f sql/schema.sql
+```
+
+### Generate synthetic data
+
+```bash
+python src/generate_data.py
+```
+
+### Load data
+
+```bash
+python src/load_data.py
+```
+
+### Run analyses
+
+Open:
+
+```text
+notebooks/analysis.ipynb
+```
+
+and execute the notebook.
+
+---
+
+## Motivation
+
+This repository forms part of a broader programme of upskilling in:
+
+- SQL
+- PostgreSQL
+- Python
+- Health Data Science
+- Reproducible Research
+- AI-assisted software development
+
+with the aim of developing production-style workflows for healthcare analytics and biostatistics.
