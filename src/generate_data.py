@@ -24,7 +24,7 @@ def generate_data():
 		"Chest pain",
 	]
 
-	with open("patients.csv", "w", newline="", encoding="utf-8") as file:
+	with open("data/patients.csv", "w", newline="", encoding="utf-8") as file:
 		writer = csv.DictWriter(file, fieldnames=["patient_id", "age", "sex"])
 		writer.writeheader()
 		for patient_id in range(1, patient_count + 1):
@@ -36,7 +36,7 @@ def generate_data():
 				}
 			)
 
-	with open("admissions.csv", "w", newline="", encoding="utf-8") as file:
+	with open("data/admissions.csv", "w", newline="", encoding="utf-8") as file:
 		writer = csv.DictWriter(
 			file,
 			fieldnames=[
