@@ -55,7 +55,7 @@ The synthetic dataset currently contains:
 | Variable | Description |
 |-----------|-------------|
 | patient_id | Unique patient identifier |
-| age | Age in years |
+| dob | Date of birth of patient |
 | sex | Biological sex |
 
 ### Admissions
