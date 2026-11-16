@@ -170,6 +170,14 @@ psql healthcare -f sql/schema.sql
 python3 src/generate_data.py
 ```
 
+### Validate generated data
+
+```bash
+python3 src/validate_data.py
+```
+
+The validator checks required fields, duplicate and orphan records, date and length-of-stay ranges, overlapping admissions, readmission-reason consistency, and complete 30-day follow-up. It exits with a non-zero status when it finds errors. Use `--data-dir` to check CSVs in another directory.
+
 ### Load data
 
 ```bash
