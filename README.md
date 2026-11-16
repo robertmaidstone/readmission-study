@@ -64,17 +64,34 @@ The synthetic dataset currently contains:
 |-----------|-------------|
 | admission_id | Unique admission identifier |
 | patient_id | Linked patient identifier |
-| admit_date | Admission date |
+| admission_date | Admission date |
 | discharge_date | Discharge date |
 | diagnosis | Primary diagnosis |
+| readmission_reason | Event category relative to the preceding discharge |
 
-Future versions will incorporate:
+### Synthetic admission assumptions
 
-- Multiple admissions per patient
-- Readmission events
+Admissions are written in chronological order. Each patient's next admission starts at least one day after the previous discharge, so stays do not overlap. Every generated discharge has at least 30 days of observation before the study end date.
+
+`readmission_reason` is assigned to the admission that follows the preceding discharge:
+
+| Value | Meaning |
+|-------|---------|
+| `index_admission` | Patient's first generated admission |
+| `unplanned_related` | Same diagnosis, 1–30 days after the previous discharge |
+| `unplanned_unrelated` | Different diagnosis, 1–30 days after the previous discharge |
+| `planned_follow_up` | Planned return with the same diagnosis, 1–30 days after discharge |
+| `new_episode` | New episode, 31–365 days after the previous discharge |
+
+The generator uses illustrative weights of 15/10/10/65 for the four subsequent-admission categories. These are synthetic scenario settings, not estimates of real-world rates. A 30-day all-cause readmission measure includes planned and unplanned returns; an unplanned measure should include only the two `unplanned_*` categories.
+
+Future versions could incorporate:
+
 - Comorbidity burden
+- Secondary diagnoses and procedures
 - Medication records
 - Mortality outcomes
+- Discharge destination
 
 ---
 
@@ -100,18 +117,17 @@ Synthetic Data Generation
 
 Implemented analyses include:
 
-- Patient demographics
-- Average age by diagnosis
+- Average age at each disease's first recorded diagnosis
 - Length of stay calculations
-- Admission frequency analyses
 - SQL-to-Python data extraction
+- Diagnostic plots
 
 Examples of SQL queries include:
 
 ```sql
 SELECT
     diagnosis,
-    AVG(discharge_date - admit_date) AS avg_los
+    AVG(discharge_date - admission_date) AS avg_los
 FROM admissions
 GROUP BY diagnosis;
 ```
