@@ -37,6 +37,7 @@ sql/
 src/
     generate_data.py
     load_data.py
+    validate_data.py
 
 notebooks/
     analysis.ipynb
