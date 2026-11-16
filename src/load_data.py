@@ -8,7 +8,7 @@ engine = create_engine(
 )
 
 patients = pd.read_csv("data/patients.csv")
-admissions = pd.read_csv("data/admissions.csv")
+admissions = pd.read_csv("data/admissions.csv",parse_dates=["admission_date", "discharge_date"])
 
 patients.to_sql(
     "patients",

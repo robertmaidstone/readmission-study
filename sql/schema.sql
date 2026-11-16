@@ -10,7 +10,7 @@ CREATE TABLE patients (
 CREATE TABLE admissions (
     admission_id INT PRIMARY KEY,
     patient_id INT,
-    admit_date DATE,
+    admission_date DATE,
     discharge_date DATE,
     diagnosis VARCHAR(50)
 );
