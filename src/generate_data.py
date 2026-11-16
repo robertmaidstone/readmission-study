@@ -10,6 +10,8 @@ def generate_data():
 	max_admissions_per_patient = 10
 	start_date = date(2018, 1, 1)
 	end_date = date(2024, 12, 31)
+	min_dob = date(1924, 1, 1)
+	max_dob = date(2006, 12, 31)
 	date_range_days = (end_date - start_date).days
 	diagnoses = [
 		"Pneumonia",
@@ -25,13 +27,13 @@ def generate_data():
 	]
 
 	with open("data/patients.csv", "w", newline="", encoding="utf-8") as file:
-		writer = csv.DictWriter(file, fieldnames=["patient_id", "age", "sex"])
+		writer = csv.DictWriter(file, fieldnames=["patient_id", "dob", "sex"])
 		writer.writeheader()
 		for patient_id in range(1, patient_count + 1):
 			writer.writerow(
 				{
 					"patient_id": patient_id,
-					"age": random.randint(18, 100),
+					"dob": date.fromordinal(random.randint(min_dob.toordinal(), max_dob.toordinal())),
 					"sex": random.choice(["Female", "Male"]),
 				}
 			)

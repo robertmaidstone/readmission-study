@@ -151,13 +151,13 @@ psql healthcare -f sql/schema.sql
 ### Generate synthetic data
 
 ```bash
-python src/generate_data.py
+python3 src/generate_data.py
 ```
 
 ### Load data
 
 ```bash
-python src/load_data.py
+python3 src/load_data.py
 ```
 
 ### Run analyses

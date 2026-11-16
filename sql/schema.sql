@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS patients;
 
 CREATE TABLE patients (
     patient_id INT PRIMARY KEY,
-    age INT,
+    dob DATE,
     sex VARCHAR(10)
 );
 
