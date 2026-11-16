@@ -184,3 +184,9 @@ This repository forms part of a broader programme of upskilling in:
 - AI-assisted software development
 
 with the aim of developing production-style workflows for healthcare analytics and biostatistics.
+
+## Stretch goals
+
+- Second dataset mirroring claims data
+- Combine admissions and claims data through imputation/probabilistic fusion
+- swap out python analysis for R (to demonstrate flexibility with workflow)
