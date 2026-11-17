@@ -5,3 +5,4 @@ __pycache__/
 *.pyo  
 .env
 data/
+src/db_config.py

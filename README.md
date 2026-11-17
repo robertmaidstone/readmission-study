@@ -181,6 +181,14 @@ The validator checks required fields, duplicate and orphan records, date and len
 
 ### Load data
 
+Create `src/db_config.py` with your local PostgreSQL connection URL:
+
+```python
+DATABASE_URL = "postgresql+psycopg2://<user>:<password>@localhost/healthcare"
+```
+
+This file is ignored by Git so your login details stay local.
+
 ```bash
 python3 src/load_data.py
 ```
