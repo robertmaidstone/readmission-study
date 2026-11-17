@@ -72,7 +72,7 @@ The synthetic dataset currently contains:
 
 ### Synthetic admission assumptions
 
-Admissions are written in chronological order. Each patient's next admission starts at least one day after the previous discharge, so stays do not overlap. Every generated discharge has at least 30 days of observation before the study end date.
+Admissions are written in chronological order. Each patient's next admission starts at least one day after the previous discharge, so stays do not overlap. Data is generated on a generation from 2018–2024, then admissions are censored by admission date to the study window of 2019-01-01 through 2023-12-31, this aims to better simulate real data where patients admissions exist beyond the study window. A patient's first retained admission is marked as `index_admission`; admissions outside the study window are not included in `admissions.csv`.
 
 `readmission_reason` is assigned to the admission that follows the preceding discharge:
 

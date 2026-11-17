@@ -10,6 +10,10 @@ READMISSION_REASON_WEIGHTS = {
 	"planned_follow_up": 10,
 	"new_episode": 65,
 }
+GENERATION_START_DATE = date(2018, 1, 1)
+GENERATION_END_DATE = date(2024, 12, 31)
+STUDY_START_DATE = date(2019, 1, 1)
+STUDY_END_DATE = date(2023, 12, 31)
 
 
 def _next_admission_details(
@@ -43,8 +47,8 @@ def generate_data():
 	patient_count = 1_000
 	min_admissions_per_patient = 1
 	max_admissions_per_patient = 10
-	start_date = date(2018, 1, 1)
-	end_date = date(2024, 12, 31)
+	start_date = GENERATION_START_DATE
+	end_date = GENERATION_END_DATE
 	readmission_window_days = 30
 	max_length_of_stay_days = 14
 	latest_admission_date = end_date - timedelta(
@@ -122,9 +126,21 @@ def generate_data():
 			previous_discharge_date = discharge_date
 			previous_diagnosis = diagnosis
 
+	admissions = [
+		admission
+		for admission in admissions
+		if STUDY_START_DATE <= admission["admission_date"] <= STUDY_END_DATE
+	]
 	admissions.sort(
 		key=lambda row: (row["admission_date"], row["patient_id"])
 	)
+
+	seen_patients = set()
+	for admission in admissions:
+		patient_id = admission["patient_id"]
+		if patient_id not in seen_patients:
+			admission["readmission_reason"] = "index_admission"
+			seen_patients.add(patient_id)
 
 	with open("data/admissions.csv", "w", newline="", encoding="utf-8") as file:
 		fieldnames = [
