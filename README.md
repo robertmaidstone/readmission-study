@@ -7,18 +7,24 @@
 
 ## Overview
 
-This repository contains a synthetic healthcare analytics workflow developed to learn and demonstrate modern health data science practices using PostgreSQL, SQL, Python and Jupyter notebooks.
+A reproducible, end-to-end healthcare analytics project built with **PostgreSQL, SQL, Python and Jupyter**. It generates realistic-but-synthetic patient and admission records, validates the data, loads it into a relational database, and performs exploratory readmission analysis.
 
-Synthetic patient and hospital admission records are generated programmatically, loaded into a PostgreSQL database and analysed using SQL and Python. The project is designed to mirror common healthcare analytics workflows used in NHS, academic and industry settings.
+> Synthetic data only. This project does not contain patient or clinical information and is for portfolio and learning purposes.
 
-The primary objectives are:
+| Dataset | Size |
+|---|---:|
+| Synthetic patients | 1,000 |
+| Synthetic admissions | 3,441 |
+| Study period | 2019-01-01 - 2023-12-31 |
 
-- Building relational healthcare databases
-- Cohort extraction using SQL
-- Integrating PostgreSQL and Python
-- Reproducible health data science workflows
-- Exploratory analysis of admissions data
-- Survival and readmission analyses
+### Portfolio highlights
+
+- Relational PostgreSQL data model with primary and foreign keys
+- CSV data generation and 30-day readmission scenario rules
+- Automated data-quality checks for IDs, dates, duplicate records, overlaps and diagnoses
+- SQL-to-Pandas analytics workflow
+- Demographic, length-of-stay and readmission visualisations
+- Local credentials kept outside version control
 
 ---
 
@@ -152,6 +158,14 @@ Planned additions include:
 
 ## Running the Project
 
+### Set up Python
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install -r requirements.txt
+```
+
 ### Create database
 
 ```bash
@@ -181,13 +195,14 @@ The validator checks required fields, duplicate and orphan records, date and len
 
 ### Load data
 
-Create `src/db_config.py` with your local PostgreSQL connection URL:
+Set a local PostgreSQL connection URL in the environment. The example below is
+for a database running locally under the `postgres` user:
 
-```python
-DATABASE_URL = "postgresql+psycopg2://<user>:<password>@localhost/healthcare"
+```bash
+export DATABASE_URL="postgresql+psycopg2://postgres:<password>@localhost/healthcare"
 ```
 
-This file is ignored by Git so your login details stay local.
+The loader replaces the contents of the existing tables inside one transaction.
 
 ```bash
 python3 src/load_data.py

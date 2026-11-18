@@ -1,6 +1,6 @@
 import argparse
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 import pandas as pd
@@ -485,7 +485,7 @@ def validate_data(data_dir: Path) -> list[Finding]:
 	)
 
 	insufficient_follow_up = discharge_dates.notna() & discharge_dates.gt(
-		study_end - pd.Timedelta(days=READMISSION_WINDOW_DAYS)
+		study_end - timedelta(days=READMISSION_WINDOW_DAYS)
 	)
 	_add_row_finding(
 		findings,
