@@ -43,11 +43,16 @@ sql/
 src/
     generate_data.py
     load_data.py
+    readmission_analysis.py
     validate_data.py
 
 notebooks/
     analysis.ipynb
 
+tests/
+    test_readmission_analysis.py
+
+requirements.txt
 README.md
 ```
 
@@ -126,8 +131,32 @@ Implemented analyses include:
 
 - Average age at each disease's first recorded diagnosis
 - Length of stay calculations
-- SQL-to-Python data extraction
-- Diagnostic plots
+- Discharge-based 30-day unplanned readmission (primary) and all-cause readmission (secondary)
+- Patient-cluster bootstrap confidence intervals for both overall rates
+- Diagnosis- and sex-stratified descriptive summaries
+- SQL-to-Python data extraction and diagnostic plots
+
+Each eligible discharge contributes one index event. The denominator excludes
+discharges without a complete 30-day observation window by 2023-12-31. A return
+is linked to the preceding discharge. The primary endpoint counts any unplanned
+return within 30 days, even if a planned return happened first; the all-cause
+endpoint counts any return. Repeated eligible discharges from the same patient
+are retained, with patient-cluster bootstrap intervals to account for
+within-patient dependence. These results describe the synthetic scenario and
+must not be interpreted as estimates of real-world clinical risk.
+
+Confidence intervals use 2,000 patient-level bootstrap replicates with a fixed
+seed so the notebook output is reproducible.
+
+For the current generated dataset:
+
+| Endpoint | Events / eligible discharges | Rate | 95% patient-cluster bootstrap CI |
+|---|---:|---:|---:|
+| 30-day unplanned | 692 / 3,347 | 20.7% | 19.3%–22.1% |
+| 30-day all-cause | 940 / 3,347 | 28.1% | 26.6%–29.5% |
+
+These are reproducible summaries of the seeded synthetic scenario, not
+population-level estimates.
 
 Examples of SQL queries include:
 
@@ -147,7 +176,6 @@ The project is being extended toward more realistic healthcare analytics workflo
 
 Planned additions include:
 
-- Readmission rate estimation
 - Kaplan-Meier survival analysis
 - Cox proportional hazards models
 - Machine learning prediction of readmission
@@ -192,6 +220,12 @@ python3 src/validate_data.py
 ```
 
 The validator checks required fields, duplicate and orphan records, date and length-of-stay ranges, overlapping admissions, readmission-reason consistency, and complete 30-day follow-up. It exits with a non-zero status when it finds errors. Use `--data-dir` to check CSVs in another directory.
+
+Run the focused endpoint tests with:
+
+```bash
+python3 -m unittest discover -s tests -v
+```
 
 ### Load data
 
