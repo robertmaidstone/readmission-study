@@ -1,48 +1,55 @@
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-def plot_rates(diagnosis_ci):
+def plot_rates(diagnosis_ci,ax=None):
+    #diagnosis_ci["diagnosis"]=diagnosis_ci["diagnosis_labels"]
     ax = sns.pointplot(
         data=diagnosis_ci,
-        x="diagnosis",
-        y="rate",
+        y="diagnosis_labels",
+        x="rate",
         hue="sex",
+        ax=ax,
+        palette={
+            "Female": "black",
+            "Male": "red",
+        },
         linestyle="None",
-    dodge=.2,
+        markersize=3,
+        dodge=.4,
     )
-    ax.set_ylabel("30-day unplanned readmission rate")
-    ax.set_xlabel("Index admission diagnosis")
-    ax.set_ylim(0, .7)
-    diagnoses = diagnosis_ci["diagnosis"].unique()
+    ax.set_xlabel("Readmission rate")
+    ax.set_ylabel("")
+    ax.set_xlim(0, .6)
+    diagnoses = diagnosis_ci["diagnosis_labels"].unique()
 
-    x_lookup = {
+    y_lookup = {
         diagnosis: i
         for i, diagnosis in enumerate(diagnoses)
     }
 
     offsets = {
-        "Female": -0.1,
-        "Male": 0.1,    
+        "Female": -0.2,
+        "Male": 0.2,    
     }
 
     for sex, colour in {
-        "Female": "blue",
-        "Male": "orange",
+        "Female": "black",
+        "Male": "red",
     }.items():
 
         subset = diagnosis_ci[
             diagnosis_ci["sex"] == sex
         ]
 
-        x_pos = [
-            x_lookup[d] + offsets[sex]
-            for d in subset["diagnosis"]
+        y_pos = [
+            y_lookup[d] + offsets[sex]
+            for d in subset["diagnosis_labels"]
         ]
 
         ax.errorbar(
-            x=x_pos,
-            y=subset["rate"],
-            yerr=[
+            y=y_pos,
+            x=subset["rate"],
+            xerr=[
                 subset["rate"] - subset["ci_lower"],
                 subset["ci_upper"] - subset["rate"]
             ],
@@ -50,5 +57,11 @@ def plot_rates(diagnosis_ci):
             color=colour,
             capsize=4,
         )
-    plt.xticks(rotation=45, ha="right")
+        ax.legend(
+            title=None,
+            frameon=False,
+            #bbox_to_anchor=(0.9, 1),
+            loc="upper right"
+        )
     plt.tight_layout()
+    return ax
